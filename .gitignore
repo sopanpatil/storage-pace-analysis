@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Large / intermediate pipeline outputs: regenerable from the code and the
+# CHESS-SCAPE forcing, kept out of version control. Paths are anchored to the
+# repository root so any committed copies under derived_output/ are unaffected.
+/chess_scape_output/
+/slow_full_flow.parquet
+/slow_full_flow_uncapped.parquet
+/projection_flow.parquet
+/forcing_deltas_*.csv
+/responder_table.parquet
+
+# Figure outputs (regenerate with figures/fig*.py)
+figures/*.pdf
+figures/*.png
+
+# External CAMELS-GB v2 catchment boundary polygons: large, not bundled,
+# obtain from the CAMELS-GB v2 dataset (see the top-level README). Used by
+# figures/fig01_studyarea.py and figures/fig03_mechanism.py.
+figures/camels_gb_v2_catchment_boundaries.zip
+
+# External calibrated HBV parameters: sourced from the separate hbv-model
+# repository (see the top-level README), not duplicated here.
+/calibrated_parameters.csv
+
+# Self-test artifacts (see selftest_io.py -- bare runs write only in here)
+/selftest/

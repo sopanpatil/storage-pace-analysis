@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite both the software and the paper below."
+title: "storage-pace-analysis: Analysis pipeline for storage-controlled flood-drought transition pace across Great Britain"
+authors:
+  - family-names: Patil
+    given-names: Sopan D.
+    orcid: "https://orcid.org/0000-0002-8575-5220"
+    affiliation: "Bangor University"
+  - family-names: Dallison
+    given-names: Richard J. H.
+    affiliation: "Bangor University"
+  - family-names: Jahanshahi
+    given-names: Afshin
+    affiliation: "University of Galway"
+version: "1.0.0"
+license: MIT
+repository-code: "https://github.com/sopanpatil/storage-pace-analysis"
+# When archiving a tagged release to Zenodo, add the two lines below:
+#   date-released: "2026-MM-DD"
+#   doi: "10.5281/zenodo.XXXXXXX"
+preferred-citation:
+  type: article
+  title: "Storage controls on the pace of flood-drought transitions across Great Britain under a warming climate"
+  authors:
+    - family-names: Patil
+      given-names: Sopan D.
+    - family-names: Dallison
+      given-names: Richard J. H.
+    - family-names: Jahanshahi
+      given-names: Afshin
+  journal: "Water Resources Research"
+  year: 2026
+  # doi: "10.xxxx/xxxxxxxxxx"   # add once the WRR DOI is assigned

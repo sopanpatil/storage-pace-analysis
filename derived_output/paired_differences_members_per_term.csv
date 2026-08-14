@@ -1,0 +1,6 @@
+direction,rcp,metric,estimate,ci_lo,ci_hi,members_resampled
+FTD,rcp85,median,8.0,2.0,15.0,True
+FTD,rcp26,median,2.0,1.0,3.0,True
+FTD,rcp45,median,2.0,0.0,5.0,True
+FTD,rcp60,median,3.0,1.0,5.0,True
+DTF,rcp85,median,2.0,1.0,4.0,True

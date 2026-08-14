@@ -1,0 +1,43 @@
+gauge_id,aquifer,BFI,tier,rho_anom,covariation,K2_floor,n_slow_ftd,n_checked,frac_codecline,med_rho,med_gwl_coh,grp
+42016,Chalk,0.92,daily,0.552,yes,False,7,3,1.0,0.97,0.71,Chalk
+38003,Chalk,0.9,monthly,0.461,yes,False,1,1,1.0,0.95,0.85,Chalk
+42024,Chalk,0.9,monthly,0.734,yes,False,3,3,1.0,1.0,1.0,Chalk
+34012,Chalk,0.89,daily,-0.332,no,True,0,0,,,,Chalk
+33032,Chalk,0.86,monthly,0.854,yes,False,2,2,1.0,0.98,0.9,Chalk
+34008,Chalk,0.85,daily,0.166,weak,True,1,1,1.0,0.86,0.26,Chalk
+26008,Kellaways and Cave Oolites,0.81,monthly,0.61,yes,False,0,0,,,,Other
+42006,Chalk,0.8,monthly,0.64,yes,False,14,8,1.0,1.0,1.0,Chalk
+28015,Permo-Triassic sandstone,0.78,monthly,0.218,weak,True,1,1,0.0,-0.8,0.83,Permo-Triassic sst
+28116,Permo-Triassic sandstone,0.78,monthly,0.245,weak,True,2,2,0.5,-0.08,0.76,Permo-Triassic sst
+27087,Chalk,0.78,daily,0.259,weak,False,0,0,,,,Chalk
+33006,Chalk,0.78,monthly,0.634,yes,False,3,3,1.0,1.0,1.0,Chalk
+34004,Chalk,0.76,daily,0.112,weak,False,0,0,,,,Chalk
+28091,Magnesian limestone,0.74,daily,0.098,no,False,0,0,,,,Other
+39007,Chalk,0.71,daily,-0.194,no,False,0,0,,,,Chalk
+27041,Upper Jurassic,0.7,daily,0.378,yes,False,0,0,,,,Other
+41009,Lower Greensand,0.66,monthly,0.374,yes,True,0,0,,,,Other
+69012,Permo-Triassic sandstone,0.66,daily,-0.097,no,False,0,0,,,,Permo-Triassic sst
+53028,Inferior Oolite Group,0.62,monthly,0.257,weak,False,0,0,,,,Other
+27064,Magnesian limestone,0.61,monthly,0.376,yes,False,6,5,1.0,0.9,0.89,Other
+69007,Permo-Triassic sandstone,0.61,daily,-0.171,no,False,0,0,,,,Permo-Triassic sst
+37010,Chalk,0.61,monthly,0.445,yes,True,3,3,1.0,0.7,0.72,Chalk
+27080,Coal Measures,0.6,monthly,0.114,weak,False,0,0,,,,Other
+33058,Chalk,0.6,monthly,0.412,yes,False,0,0,,,,Chalk
+69030,Permo-Triassic sandstone,0.6,daily,-0.121,no,False,0,0,,,,Permo-Triassic sst
+36006,Chalk,0.59,daily,0.299,weak,False,0,0,,,,Chalk
+55023,Superficial Deposits,0.58,daily,0.783,yes,False,0,0,,,,Other
+53007,Carboniferous Limestone,0.57,monthly,0.571,yes,False,0,0,,,,Other
+27029,Millstone Grit,0.57,daily,-0.027,no,False,0,0,,,,Other
+41005,Hastings Beds,0.56,monthly,0.623,yes,False,0,0,,,,Other
+27071,Permo-Triassic sandstone,0.55,monthly,0.096,no,False,0,0,,,,Permo-Triassic sst
+68020,Permo-Triassic sandstone,0.55,daily,-0.194,no,False,0,0,,,,Permo-Triassic sst
+27009,Permo-Triassic sandstone,0.54,monthly,0.084,no,False,0,0,,,,Permo-Triassic sst
+27001,Magnesian limestone,0.54,monthly,0.077,no,False,0,0,,,,Other
+67033,Permo-Triassic sandstone,0.54,daily,0.205,weak,False,0,0,,,,Permo-Triassic sst
+34010,Chalk,0.52,monthly,0.409,yes,False,0,0,,,,Chalk
+40007,Hastings Beds,0.51,daily,0.208,weak,False,0,0,,,,Other
+40017,Hastings Beds,0.48,monthly,0.441,yes,False,0,0,,,,Other
+76005,Permo-Triassic sandstone,0.47,monthly,0.062,no,False,2,1,1.0,0.4,0.49,Permo-Triassic sst
+41028,Chalk,0.46,monthly,0.466,yes,False,0,0,,,,Chalk
+71001,Permo-Triassic sandstone,0.46,daily,-0.006,no,False,1,0,,,,Permo-Triassic sst
+41003,Chalk,0.35,monthly,,weak,False,0,0,,,,Chalk

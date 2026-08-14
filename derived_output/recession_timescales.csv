@@ -1,0 +1,4 @@
+store,tau_median_d,tau_q25_d,tau_q75_d
+"K0 (fast, >UZL)",1.93,1.45,3.21
+"K1 (upper zone, interflow)",2.92,2.8,3.92
+"K2 (lower zone, baseflow)",10.31,7.51,21.13

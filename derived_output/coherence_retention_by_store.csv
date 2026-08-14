@@ -1,0 +1,4 @@
+rate_limiting_store,n_candidates,n_retained,retention_rate
+LZ,174803,8772,0.050182205110896265
+UZ,46018,48,0.0010430701030031727
+none,2069,0,0.0

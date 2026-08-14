@@ -1,0 +1,5 @@
+contrast,metric,estimate_a,estimate_b,difference,ci_lo,ci_hi,p_two_sided,n_boot,members_resampled
+FTD RCP8.5 - FTD RCP2.6,median,8.0,2.0,6.0,3.0,9.0,0.0,5000,False
+FTD RCP8.5 - FTD RCP4.5,median,8.0,2.0,6.0,3.0,9.0,0.0,5000,False
+FTD RCP8.5 - FTD RCP6.0,median,8.0,3.0,5.0,3.0,7.0,0.0,5000,False
+FTD RCP8.5 - DTF RCP8.5,median,8.0,2.0,6.0,3.0,9.0,0.0,5000,False

@@ -1,0 +1,11 @@
+# Core scientific stack for the storage-pace-analysis pipeline.
+numpy
+pandas
+scipy
+pyarrow          # parquet I/O (transition tables, projection deltas, responder table)
+numba            # JIT kernels in hbv-model's hbv.py (HBV; external dependency, not on PyPI)
+statsmodels      # logistic discrimination in responder_characterisation.py
+scikit-learn     # fallback logistic fit if statsmodels is unavailable
+matplotlib       # all figures (figures/*.py)
+geopandas        # catchment-boundary maps in figures/fig01_studyarea.py and
+                 # figures/fig03_mechanism.py only; both degrade without it
