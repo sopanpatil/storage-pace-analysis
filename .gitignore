@@ -5,7 +5,7 @@ __pycache__/
 # Large / intermediate pipeline outputs: regenerable from the code and the
 # CHESS-SCAPE forcing, kept out of version control. Paths are anchored to the
 # repository root so any committed copies under derived_output/ are unaffected.
-/chess_scape_output/
+/chess_scape_output
 /slow_full_flow.parquet
 /slow_full_flow_uncapped.parquet
 /projection_flow.parquet
@@ -21,9 +21,10 @@ figures/*.png
 # figures/fig01_studyarea.py and figures/fig03_mechanism.py.
 figures/camels_gb_v2_catchment_boundaries.zip
 
-# External calibrated HBV parameters: sourced from the separate hbv-model
-# repository (see the top-level README), not duplicated here.
+# External calibrated HBV parameters and package: sourced from the separate
+# hbv-model repository (see the top-level README), not duplicated here.
 /calibrated_parameters.csv
+/hbv_model
 
 # Self-test artifacts (see selftest_io.py -- bare runs write only in here)
 /selftest/

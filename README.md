@@ -33,11 +33,14 @@ degrade gracefully without it — `fig01_studyarea.py` falls back to catchment
 outlet points, and `fig03_mechanism.py` drops its map panel.
 
 **`hbv-model` is a required external dependency, not on PyPI.** Clone it as a
-sibling directory so `run_hbv_chess_scape.py`'s `from hbv_model.hbv import
-HBVModel` resolves:
+sibling directory, then symlink its package into this repository so
+`run_hbv_chess_scape.py`'s `from hbv_model.hbv import HBVModel` resolves —
+cloning as a sibling alone is not enough, since Python only searches the
+directory containing the script being run, not its parent or siblings:
 
 ```bash
 git clone https://github.com/sopanpatil/hbv-model ../hbv-model
+ln -s ../hbv-model/hbv_model hbv_model
 ```
 
 Requires **`hbv-model` `v1.1.0` or later**
