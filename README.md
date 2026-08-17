@@ -117,6 +117,7 @@ storage-pace-analysis/
 ├── si_table_s3.py                  Supporting Information: Table S3 (candidate discriminators)
 ├── verify_manuscript_numbers.py    recompute and check the reported Results numbers
 ├── verify_robustness_checks.py     the two robustness numbers that need the raw HBV output
+├── regenerate_and_verify_fluxes.py provenance check: prove the re-run reproduces the archived HBV states/fluxes
 ├── selftest_io.py                  keeps no-argument self-test output out of the production paths
 ├── camels_gb_v2_*_attributes.csv   bundled CAMELS-GB v2 attribute tables (OGL v3.0)
 ├── figures/                        figure scripts + shared AGU styling (see figures/README.md)
@@ -256,6 +257,24 @@ python verify_robustness_checks.py --jasmin-dir chess_scape_output \
 
 Run it after any change to the pairing, coherence or gap-cap settings, so the
 robustness numbers stay on the same production footing as the headline ones.
+
+Finally, the logged generating fluxes (Q0/Q1/Q2 and snowmelt) that underpin the
+fast/slow-store attribution can be re-derived and checked against the archive:
+
+```bash
+python regenerate_and_verify_fluxes.py --archive-dir chess_scape_output \
+    --params-csv calibrated_parameters.csv --model-path .
+
+# prove the tool with no archive data (synthetic self-test):
+python regenerate_and_verify_fluxes.py --selftest --model-path .
+```
+
+This re-runs the flux-logging HBV, verifies the re-run reproduces the archived
+states (to the archive's storage precision) with exact flux closure and
+agreement with the Section 2.5 reconstruction, and only then writes the
+full-precision fluxes — establishing that the logged fluxes belong to the run
+behind the Results. It is a provenance check, not a producer of headline
+numbers.
 
 ## Citation
 
