@@ -23,7 +23,7 @@ transitions:
 
 Two grids are run: the pairing grid (resaturation_delta x max_gap_days,
 Table S1) and the coherence grid (coherence_min, Table S2). Output is written
-as CSV plus a ready-to-\\input LaTeX table for each.
+as one CSV per grid (SI Tables S1 and S2).
 
 This is compute-equivalent to one full production run
 (slow_transition_analysis.py --attribution flow) per grid point, so on
@@ -40,15 +40,13 @@ Usage (production, JASMIN):
 Self-test (no args): runs the same two grids on the synthetic
 fast/slow/snow archetypes used by slow_transition_analysis.py's own
 self-test. Numbers from the self-test are NOT real results and must not be
-pasted into the manuscript -- they only demonstrate the pipeline and LaTeX
-formatting end-to-end.
+pasted into the manuscript -- they only demonstrate the pipeline end-to-end.
 """
 
 from __future__ import annotations
 
 import argparse
 from dataclasses import replace
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -137,73 +135,6 @@ def coherence_grid(base_cfg: sta.Config, cohmin_grid: list[float],
 
 
 # --------------------------------------------------------------------------- #
-# LaTeX formatting                                                            #
-# --------------------------------------------------------------------------- #
-def pairing_to_latex(df: pd.DataFrame, rcp: str) -> str:
-    lines = [
-        r"\begin{center}",
-        r"\small",
-        r"\resizebox{\textwidth}{!}{%",
-        r"\begin{tabular}{l r r r r r r r}",
-        r"\hline",
-        r"Parameter varied & Value & Baseline median (d) & Baseline p90 (d) & "
-        f"Baseline slow share & {rcp.upper()} future median (d) & "
-        f"{rcp.upper()} future slow share & $\\Delta$ median (d) \\\\",
-        r"\hline",
-    ]
-    for _, row in df.iterrows():
-        label = ("Re-saturation tolerance" if row["varied"] == "resaturation_delta"
-                 else "Max gap cap (d)")
-        val = f"{row['value']:.2f}" if row["varied"] == "resaturation_delta" else f"{int(row['value'])}"
-        if row["is_production"]:
-            val = r"\textbf{" + val + "}\\textsuperscript{a}"
-        lines.append(
-            f"{label} & {val} & {row['baseline_median']:.1f} & "
-            f"{row['baseline_p90']:.1f} & {row['baseline_slowshare']:.3f} & "
-            f"{row['future_median']:.1f} & {row['future_slowshare']:.3f} & "
-            f"{row['d_median']:+.1f} \\\\")
-    lines += [
-        r"\hline",
-        r"\end{tabular}%",
-        r"}",
-        r"\end{center}",
-        r"\textsuperscript{a}Production value used throughout the main text.",
-    ]
-    return "\n".join(lines)
-
-
-def coherence_to_latex(df: pd.DataFrame, rcp: str) -> str:
-    lines = [
-        r"\begin{center}",
-        r"\small",
-        r"\resizebox{\textwidth}{!}{%",
-        r"\begin{tabular}{r r r r r r r r}",
-        r"\hline",
-        r"$C_{min}$ & $n$ coherent (FTD) & Baseline median (d) & Baseline p90 (d) & "
-        f"Baseline slow share & {rcp.upper()} future median (d) & "
-        f"{rcp.upper()} future slow share & $\\Delta$ median (d) \\\\",
-        r"\hline",
-    ]
-    for _, row in df.iterrows():
-        val = f"{row['value']:.2f}"
-        if row["is_production"]:
-            val = r"\textbf{" + val + "}\\textsuperscript{a}"
-        lines.append(
-            f"{val} & {int(row['n_coherent'])} & {row['baseline_median']:.1f} & "
-            f"{row['baseline_p90']:.1f} & {row['baseline_slowshare']:.3f} & "
-            f"{row['future_median']:.1f} & {row['future_slowshare']:.3f} & "
-            f"{row['d_median']:+.1f} \\\\")
-    lines += [
-        r"\hline",
-        r"\end{tabular}%",
-        r"}",
-        r"\end{center}",
-        r"\textsuperscript{a}Production value used throughout the main text.",
-    ]
-    return "\n".join(lines)
-
-
-# --------------------------------------------------------------------------- #
 # Main                                                                        #
 # --------------------------------------------------------------------------- #
 def main() -> None:
@@ -251,7 +182,6 @@ def main() -> None:
         run_kwargs = dict(jasmin_dir=args.jasmin_dir, params_by_gauge=params_by_gauge,
                           gauges=gauges, rcps=rcps, members=members,
                           synthetic_df=None, rcp_for_summary=args.summary_rcp)
-        note = ""
         print(f"Production run: dir={args.jasmin_dir}  rcps={rcps}  "
               f"members={members}\n")
     else:
@@ -263,8 +193,6 @@ def main() -> None:
         run_kwargs = dict(jasmin_dir=None, params_by_gauge=None, gauges=None,
                           rcps=(), members=(), synthetic_df=synth,
                           rcp_for_summary="rcp85")
-        note = ("SELF-TEST OUTPUT (synthetic fixture) -- for pipeline "
-               "verification only, not for submission.\n")
 
     selftest = not args.jasmin_dir
     prefix = selftest_io.redirect(args.out_prefix, selftest)
@@ -273,20 +201,13 @@ def main() -> None:
     pdf = pairing_grid(base_cfg, resat_grid, maxgap_grid, **run_kwargs)
     print(pdf.to_string(index=False))
     pdf.to_csv(f"{prefix}_pairing.csv", index=False)
-    Path(f"{prefix}_pairing.tex").write_text(
-        (f"% {note}" if note else "")
-        + pairing_to_latex(pdf, args.summary_rcp) + "\n")
 
     print("\nRunning coherence-threshold grid (coherence_min)...")
     cdf = coherence_grid(base_cfg, cohmin_grid, **run_kwargs)
     print(cdf.to_string(index=False))
     cdf.to_csv(f"{prefix}_coherence.csv", index=False)
-    Path(f"{prefix}_coherence.tex").write_text(
-        (f"% {note}" if note else "")
-        + coherence_to_latex(cdf, args.summary_rcp) + "\n")
 
-    print(f"\nWrote {prefix}_pairing.{{csv,tex}} and "
-          f"{prefix}_coherence.{{csv,tex}}")
+    print(f"\nWrote {prefix}_pairing.csv and {prefix}_coherence.csv")
     if selftest:
         selftest_io.announce([f"{prefix}_pairing.csv"])
 
