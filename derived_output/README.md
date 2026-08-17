@@ -20,6 +20,8 @@ the paper and are not read by any script in this repository:
 |------|-------------|-------|
 | `recession_timescales.csv` | `recession_timescales.py` | UZ/LZ recession timescales quoted in the SI (Fig. S1 recomputes these from the calibrated parameters) |
 | `bootstrap_conditional_gap.csv` | `bootstrap_conditional_gap.py` | Table 1 conditional-gap confidence intervals |
+| `si_sensitivity_pairing.csv` | `si_sensitivity_analysis.py` | Supporting Information Table S1 |
+| `si_sensitivity_coherence.csv` | `si_sensitivity_analysis.py` | Supporting Information Table S2 |
 | `table_s3.csv` | `si_table_s3.py` | Supporting Information Table S3 |
 
 The three corroboration tables are provided as derived data rather than as a

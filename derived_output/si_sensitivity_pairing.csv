@@ -1,0 +1,9 @@
+varied,value,is_production,baseline_n,baseline_median,baseline_p90,baseline_slowshare,future_n,future_median,future_p90,future_slowshare,d_median,n_coherent
+resaturation_delta,0.1,False,15903,13.0,54.0,0.049,15327,21.0,91.0,0.102,8.0,31230
+resaturation_delta,0.15,True,16514,13.0,56.0,0.049,15679,21.0,91.0,0.101,8.0,32193
+resaturation_delta,0.2,False,16711,13.0,56.0,0.049,15809,21.0,91.0,0.1,8.0,32520
+resaturation_delta,0.25,False,16797,13.0,56.0,0.049,15864,21.0,91.0,0.1,8.0,32661
+max_gap_days,365.0,False,16499,13.0,55.0,0.048,15677,21.0,91.0,0.101,8.0,32176
+max_gap_days,546.0,False,16508,13.0,55.3,0.049,15678,21.0,91.0,0.101,8.0,32186
+max_gap_days,730.0,True,16514,13.0,56.0,0.049,15679,21.0,91.0,0.101,8.0,32193
+max_gap_days,1095.0,False,16525,13.0,56.0,0.05,15679,21.0,91.0,0.101,8.0,32204

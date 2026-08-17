@@ -1,0 +1,6 @@
+varied,value,is_production,baseline_n,baseline_median,baseline_p90,baseline_slowshare,future_n,future_median,future_p90,future_slowshare,d_median,n_coherent
+coherence_min,0.5,False,21762,16.0,73.0,0.07,21847,29.0,95.0,0.115,13.0,43609
+coherence_min,0.55,False,18949,15.0,64.0,0.058,18507,25.0,93.0,0.108,10.0,37456
+coherence_min,0.6,True,16514,13.0,56.0,0.049,15679,21.0,91.0,0.101,8.0,32193
+coherence_min,0.65,False,14479,12.0,48.0,0.04,13290,17.0,88.0,0.094,5.0,27769
+coherence_min,0.7,False,12650,11.0,42.0,0.032,11291,14.0,84.0,0.083,3.0,23941
