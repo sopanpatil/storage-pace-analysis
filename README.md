@@ -1,10 +1,6 @@
 # storage-pace-analysis
 
-Analysis pipeline for **"Storage controls on the pace of flood–drought
-transitions across Great Britain under a warming climate"** (Patil, Dallison &
-Jahanshahi, submitted to *Water Resources Research*).
-
-The pipeline runs the HBV rainfall–runoff model across CHESS-SCAPE climate
+The analysis pipeline here runs the HBV rainfall–runoff model across CHESS-SCAPE climate
 projections for 621 CAMELS-GB v2 catchments, identifies flood-to-drought (FTD)
 and drought-to-flood (DTF) transitions with a storage-based pairing and a
 coherence filter, attributes each transition to the HBV store that limits its
@@ -63,15 +59,17 @@ exceptions are `verify_manuscript_numbers.py`, which requires its input, and
 
 | Dataset | Used for | Source |
 |---------|----------|--------|
-| CAMELS-GB v2 (Coxon et al., 2026) | catchment attributes, observed streamflow/borehole records, catchment boundaries | NERC Environmental Data Service |
+| CAMELS-GB v2 (Coxon et al., 2026) | observed streamflow/borehole records, catchment boundaries (the attribute tables the code reads are bundled — see below) | NERC Environmental Data Service |
 | CHESS-SCAPE (Robinson et al., 2023) | daily precipitation, temperature, wind, humidity, and radiation forcing for the four RCPs × four members | Centre for Environmental Data Analysis (CEDA) |
-| Derived PET | third HBV forcing input, computed from CHESS-SCAPE variables | this repository, `pet_penman_monteith.py` (Stage 0; FAO-56 Penman-Monteith, not a native CHESS-SCAPE variable) |
 | Calibrated HBV parameters (`calibrated_parameters.csv`) and the HBV model itself (`HBVModel`) | per-catchment HBV parameters, KGE/`used_in_analysis` flags, and the model implementation | [hbv-model](https://github.com/sopanpatil/hbv-model) `>= v1.1.0` (`https://doi.org/10.5281/zenodo.21860981`) |
 | `chess_scape_output/` (catchment-mean forcing + HBV outputs, all 16 RCP × member combinations) | full Stage 0–1 reproducibility without a JASMIN rerun | archived on Zenodo at `https://doi.org/10.5281/zenodo.21861386`, including the raster-to-catchment extraction code as provenance |
 
 The pipeline consumes CHESS-SCAPE as per-catchment daily means, one wide CSV per
 variable, member, and RCP:
-`<rcp>_<member>_{pr,pet,tas}_catchment_means_combined.csv`.
+`<rcp>_<member>_{pr,pet,tas}_catchment_means_combined.csv`. PET is not a native
+CHESS-SCAPE variable — it is derived by this repository's Stage 0
+(`pet_penman_monteith.py`) and written alongside the other forcing files, so it
+is included in the `chess_scape_output/` archive above.
 
 ### Bundled data (this repository)
 
