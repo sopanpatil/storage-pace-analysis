@@ -64,6 +64,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
 from matplotlib.gridspec import GridSpecFromSubplotSpec
 
 import agu_style as S
@@ -274,8 +275,11 @@ def make_figure(pf: pd.DataFrame, rt: pd.DataFrame, fd: pd.DataFrame,
         med = float(np.median(vals))
         medians.append((axc, med, fmt[col].format(med)))
         axc.set_xlabel(xlab, fontsize=6.5)
-        axc.set_xticks([])   # numeric ticks collide across these narrow panels;
-                             # the median is labelled directly on its line instead
+        # Two ticks per panel: at this width three labels ran together
+        # (e.g. "2.8 3.2 3.6" printing as "2.83.23.6"). The median is still
+        # annotated directly on its line.
+        axc.xaxis.set_major_locator(mticker.MaxNLocator(nbins=2, prune="both"))
+        axc.tick_params(axis="x", labelsize=5.5, pad=1.5, length=2)
         if k == 0:
             axc.set_ylabel("Catchments")
             S.panel_label(axc, "c", x=-0.35)

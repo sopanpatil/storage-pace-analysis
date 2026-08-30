@@ -204,20 +204,23 @@ def make_figure(df: pd.DataFrame, outdir: str) -> None:
             axB.scatter(sub["med_gwl_coh"], sub["med_rho"],
                         s=14 + 5 * sub["n_checked"], color=GRP_COLORS[g],
                         marker=marker,
-                        alpha=0.75, edgecolor="white", linewidth=0.4,
-                        label=(GRP_LABELS[g].replace("\n", " ")
-                               if not is_floored else None))
+                        alpha=0.75, edgecolor="white", linewidth=0.4)
     axB.set_xlim(-0.05, 1.05)
     axB.set_ylim(-1.05, 1.05)
     axB.axhline(0, color="0.6", lw=0.6)
     axB.set_xlabel("Observed-level coherence (event test)")
     axB.set_ylabel("Across-transition rank correlation")
-    # Placed below the axes -- the "lower left" corner sits close enough to
-    # low-coherence, negative-correlation sandstone points (e.g. the pair
-    # near coherence 0.75-0.85, rho -0.1 to -0.8) that a same-colour legend
-    # swatch there risks being read as another data point.
-    axB.legend(loc="upper center", bbox_to_anchor=(0.5, -0.36), fontsize=6,
-              markerscale=0.7, handletextpad=0.3, borderaxespad=0.2)
+    # Explicit fixed-size handles: the scatter above sizes markers by
+    # n_checked, so an auto-legend would inherit a different swatch size per
+    # aquifer class and read as though size carried class information.
+    handles_b = [plt.Line2D([0], [0], marker="o", lw=0, markersize=3.5,
+                            color=GRP_COLORS[g],
+                            markeredgecolor="white", markeredgewidth=0.4,
+                            label=GRP_LABELS[g].replace("\n", " "))
+                 for g in GRP_ORDER if len(chk[chk["grp"] == g])]
+    axB.legend(handles=handles_b, loc="upper center",
+              bbox_to_anchor=(0.5, -0.36), fontsize=6,
+              handletextpad=0.3, borderaxespad=0.2)
     S.panel_label(axB, "b")
 
     # ---- Panel (c): identifiability cross-check ----------------------------
