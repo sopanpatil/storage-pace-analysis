@@ -172,6 +172,10 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--input", help="slow_full_flow.parquet")
+    ap.add_argument("--max-gap", type=int, default=720,
+                    help="production gap bound in days (default 720 = two "
+                         "water years on the 360-day model calendar, "
+                         "manuscript Section 2.3); pass 0 for uncensored")
     ap.add_argument("--jasmin-dir", help="dir with *_hbv_melt.csv")
     ap.add_argument("--out", default=None, help="optional per-transition CSV")
     args = ap.parse_args()
@@ -182,6 +186,8 @@ def main() -> None:
         return
 
     tr = pd.read_parquet(args.input)
+    if args.max_gap:
+        tr = tr[tr["gap_days"] <= args.max_gap].copy()
     carriers = select_carriers(tr)
     print(f"coherent slow LZ-limited FTD carriers: {len(carriers):,}")
     if carriers.empty:

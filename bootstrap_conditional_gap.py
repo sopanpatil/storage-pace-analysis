@@ -70,10 +70,18 @@ DEFAULT_CI = 95.0             # central CI width (%)
 # --------------------------------------------------------------------------- #
 # Loading (identical filter to projection_analysis.load)                      #
 # --------------------------------------------------------------------------- #
-def load(parquet: str) -> pd.DataFrame:
+def load(parquet: str, max_gap: int | None = 720) -> pd.DataFrame:
+    """Load the coherent transitions, censored at the production gap cap.
+
+    Applied here rather than assumed of the input, so results sit on the same
+    720-day production footing as the manuscript (Section 2.3) whether the
+    table on disk is pre-capped or not. Pass max_gap=None for uncensored.
+    """
     tr = pd.read_parquet(parquet)
     if "passes_coherence" in tr.columns:
         tr = tr[tr["passes_coherence"]].copy()
+    if max_gap:
+        tr = tr[tr["gap_days"] <= max_gap].copy()
     tr["gauge_id"] = tr["gauge_id"].astype(str)
     return tr
 
@@ -250,11 +258,15 @@ def main() -> None:
                     help="Bootstrap resampling unit (default: gauge = catchment).")
     ap.add_argument("--ci", type=float, default=DEFAULT_CI)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--max-gap", type=int, default=720,
+                    help="production gap bound in days (default 720 = two "
+                         "water years on the 360-day model calendar, "
+                         "manuscript Section 2.3); pass 0 for uncensored")
     ap.add_argument("--out", type=str, default="bootstrap_conditional_gap.csv")
     args = ap.parse_args()
 
     if args.input:
-        tr = load(args.input)
+        tr = load(args.input, max_gap=args.max_gap or None)
         print(f"Loaded {len(tr):,} coherent transitions from {args.input}")
     else:
         print("No --input: synthetic self-test (planted +2/+2/+3/+8 FTD shift, "

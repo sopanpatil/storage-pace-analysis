@@ -57,9 +57,17 @@ ABRUPT_CUTOFF = 90               # days
 # --------------------------------------------------------------------------- #
 # Loading                                                                     #
 # --------------------------------------------------------------------------- #
-def load(parquet: str) -> pd.DataFrame:
+def load(parquet: str, max_gap: int | None = 720) -> pd.DataFrame:
+    """Load the coherent transitions, censored at the production gap cap.
+
+    Applied here rather than assumed of the input, so results sit on the same
+    720-day production footing as the manuscript (Section 2.3) whether the
+    table on disk is pre-capped or not. Pass max_gap=None for uncensored.
+    """
     tr = pd.read_parquet(parquet)
     tr = tr[tr["passes_coherence"]].copy()
+    if max_gap:
+        tr = tr[tr["gap_days"] <= max_gap].copy()
     tr["gauge_id"] = tr["gauge_id"].astype(str)
     return tr
 
@@ -254,11 +262,15 @@ def main() -> None:
                     help="Transition parquet from slow_transition_analysis.py.")
     ap.add_argument("--attr", type=str, default=None,
                     help="CAMELS-GB hydrologic attributes CSV (for BFI strata).")
+    ap.add_argument("--max-gap", type=int, default=720,
+                    help="production gap bound in days (default 720 = two "
+                         "water years on the 360-day model calendar, "
+                         "manuscript Section 2.3); pass 0 for uncensored")
     ap.add_argument("--out", type=str, default="projection_flow.parquet")
     args = ap.parse_args()
 
     if args.input:
-        tr = load(args.input)
+        tr = load(args.input, max_gap=args.max_gap or None)
         attr = args.attr
         print(f"Loaded {len(tr):,} coherent transitions from {args.input}")
     else:

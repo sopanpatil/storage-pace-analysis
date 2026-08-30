@@ -51,7 +51,13 @@ CUTOFF = 90  # the conventional abrupt/slow window (days)
 
 
 
-def load(parquet: str) -> pd.DataFrame:
+def load(parquet: str, max_gap: int | None = 720) -> pd.DataFrame:
+    """Load the coherent FTD transitions, censored at the production gap cap.
+
+    Applied here rather than assumed of the input, so the panels and the
+    printed summary sit on the same 720-day production footing as the reported
+    results (manuscript Section 2.3). Pass max_gap=None for an uncensored pass.
+    """
     df = pd.read_parquet(parquet)
     need = {"gap_days", "direction", "period", "passes_coherence"}
     missing = need - set(df.columns)
@@ -59,6 +65,8 @@ def load(parquet: str) -> pd.DataFrame:
         raise KeyError(f"{parquet} is missing columns: {sorted(missing)}")
     df = df[(df["direction"] == "FTD") & (df["passes_coherence"])].copy()
     df["gap_days"] = df["gap_days"].astype(float)
+    if max_gap:
+        df = df[df["gap_days"] <= max_gap].copy()
     return df
 
 
@@ -174,11 +182,15 @@ def main() -> None:
     ap.add_argument("--survival-max", type=int, default=210,
                     help="x-axis limit (days) for the panel (b) survival curves; "
                          "default 210 caps the sparse far tail (use 365 for full)")
+    ap.add_argument("--max-gap", type=int, default=720,
+                    help="production gap bound in days (default 720 = two "
+                         "water years on the 360-day model calendar, "
+                         "manuscript Section 2.3); pass 0 for uncensored")
     ap.add_argument("--outdir", default="figures", help="output directory")
     args = ap.parse_args()
 
     S.set_style()
-    df = load(args.input)
+    df = load(args.input, max_gap=args.max_gap or None)
     print("Figure 2 -- FTD transition-gap continuum")
     summarise(df)
     make_figure(df, args.outdir, args.future_rcp, args.survival_max)

@@ -57,7 +57,13 @@ DEFAULT_CI = 95.0
 
 
 # --------------------------------------------------------------------------- #
-def load(parquet: str) -> pd.DataFrame:
+def load(parquet: str, max_gap: int | None = 720) -> pd.DataFrame:
+    """Load the coherent transitions, censored at the production gap cap.
+
+    Applied here rather than assumed of the input, so results sit on the same
+    720-day production footing as the manuscript (Section 2.3) whether the
+    table on disk is pre-capped or not. Pass max_gap=None for uncensored.
+    """
     tr = pd.read_parquet(parquet)
     need = {"gap_days", "direction", "period", "rcp", "member", "gauge_id"}
     missing = need - set(tr.columns)
@@ -65,6 +71,8 @@ def load(parquet: str) -> pd.DataFrame:
         raise KeyError(f"{parquet} is missing columns: {sorted(missing)}")
     if "passes_coherence" in tr.columns:
         tr = tr[tr["passes_coherence"]].copy()
+    if max_gap:
+        tr = tr[tr["gap_days"] <= max_gap].copy()
     tr["gauge_id"] = tr["gauge_id"].astype(str)
     tr["member"] = tr["member"].astype(str)
     return tr
@@ -230,6 +238,10 @@ def main() -> None:
     ap.add_argument("--resample-members", action="store_true",
                     help="also resample the four ensemble members, propagating "
                          "ensemble uncertainty into the interval")
+    ap.add_argument("--max-gap", type=int, default=720,
+                    help="production gap bound in days (default 720 = two "
+                         "water years on the 360-day model calendar, "
+                         "manuscript Section 2.3); pass 0 for uncensored")
     ap.add_argument("--out", default=None, help="CSV path for the differences")
     args = ap.parse_args()
 
@@ -237,7 +249,7 @@ def main() -> None:
         _self_test()
         return
 
-    tr = load(args.input)
+    tr = load(args.input, max_gap=args.max_gap or None)
     diffs, per_term = run(tr, DEFAULT_CONTRASTS, args.metric, args.n_boot,
                           args.ci, args.seed, args.resample_members)
     _print(diffs, per_term)
