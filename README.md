@@ -179,7 +179,7 @@ python slow_transition_analysis.py --jasmin-dir chess_scape_output \
 ```
 
 `--attribution flow` selects the flow-weighted attribution the paper reports;
-the default `runoff-norm` is the storage-based robustness variant. The 730-day
+the default `runoff-norm` is the storage-based robustness variant. The 720-day
 gap bound (manuscript Section 2.3) is applied by default; pass `--max-gap 0`
 only for an uncensored distribution pass, and do not read reported numbers off
 the result.

@@ -8,15 +8,16 @@ transition table, using the EXACT reductions in projection_analysis.py
 beside the value currently in the manuscript with a MATCH / CHECK flag.
 
 Definitions reproduced verbatim:
-  * load: keep rows where passes_coherence is True.
+  * load: keep rows where passes_coherence is True and gap_days <= --max-gap.
   * population_shift: per direction/RCP/period, gap_days median, quantile(0.90),
     and share with gap_days > 90.  (projection_analysis.py)
   * mechanism: among coherent FTD, rate_limiting_store shares for slow and for
     abrupt regimes (normalised over UZ+LZ).  (slow_transition_analysis.py)
 
-The transition table this reads is the production, 730-day-capped one
-(manuscript Section 2.3). Running it against an uncensored table will report
-CHECK on the counts and the baseline slow share.
+The 720-day production gap cap (manuscript Section 2.3) is applied here rather
+than assumed, so this runs correctly against either a pre-capped or an
+uncensored transition table. Pass --max-gap 0 to skip the cap; that reports
+CHECK on the counts and the baseline slow share, as it should.
 
 Table 1 CONFIDENCE INTERVALS are NOT recomputed here -- they come from
 bootstrap_conditional_gap.py. This script gives the Table 1 POINT values
@@ -77,10 +78,22 @@ def pop_shift(tr, direction):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--input", required=True)
+    ap.add_argument("--max-gap", type=int, default=720,
+                    help="Production gap bound in days (default 720 = two "
+                         "water years on the 360-day model calendar, "
+                         "manuscript Section 2.3); pass 0 to leave the table "
+                         "uncensored.")
     args = ap.parse_args()
 
     tr = pd.read_parquet(args.input)
     tr = tr[tr["passes_coherence"]].copy()
+    if args.max_gap:
+        n_before = len(tr)
+        tr = tr[tr["gap_days"] <= args.max_gap].copy()
+        print(f"Gap cap: {args.max_gap} d  "
+              f"({n_before - len(tr):,} of {n_before:,} coherent rows censored)")
+    else:
+        print("Gap cap: NONE (uncensored) -- counts will not match the manuscript")
     tr["gauge_id"] = tr["gauge_id"].astype(str)
 
     print("=" * 70)

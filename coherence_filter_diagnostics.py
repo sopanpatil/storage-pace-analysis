@@ -44,6 +44,8 @@ Usage
     python coherence_filter_diagnostics.py --input slow_full_flow.parquet \
         --outdir derived_output
     python coherence_filter_diagnostics.py            # synthetic self-test
+
+The 720-day production gap cap is applied on load; pass --max-gap 0 to skip.
 """
 from __future__ import annotations
 
@@ -55,14 +57,22 @@ import pandas as pd
 
 RCPS = ("rcp26", "rcp45", "rcp60", "rcp85")
 CUTOFF = 90                      # conventional abrupt/slow window (days)
-GAP_BANDS = [0, 10, 20, 30, 40, 50, 60, 75, 90, 120, 180, 730]
-TAIL_THRESHOLDS = [90, 120, 150, 180, 210, 270, 365]
+GAP_BANDS = [0, 10, 20, 30, 40, 50, 60, 75, 90, 120, 180, 720]
+TAIL_THRESHOLDS = [90, 120, 150, 180, 210, 270, 360]
 
 
 # --------------------------------------------------------------------------
 # loading
 # --------------------------------------------------------------------------
-def load(parquet: str, direction: str = "FTD") -> pd.DataFrame:
+def load(parquet: str, direction: str = "FTD",
+         max_gap: int | None = 720) -> pd.DataFrame:
+    """Load the transition table, censored at the production gap cap.
+
+    The cap is applied here rather than assumed of the input, so the diagnostics
+    sit on the same 720-day production footing as the reported results
+    (manuscript Section 2.3) whether the table on disk is pre-capped or not.
+    Pass max_gap=None for an uncensored pass.
+    """
     df = pd.read_parquet(parquet)
     need = {"gap_days", "direction", "period", "rcp", "rate_limiting_store",
             "passes_coherence", "gauge_id"}
@@ -71,6 +81,8 @@ def load(parquet: str, direction: str = "FTD") -> pd.DataFrame:
         raise KeyError(f"{parquet} is missing columns: {sorted(missing)}")
     df = df[df["direction"] == direction].copy()
     df["gap_days"] = df["gap_days"].astype(float)
+    if max_gap:
+        df = df[df["gap_days"] <= max_gap].copy()
     return df
 
 
@@ -277,6 +289,10 @@ def main() -> None:
     ap.add_argument("--input", default=None,
                     help="per-transition parquet from slow_transition_analysis.py")
     ap.add_argument("--direction", default="FTD", choices=["FTD", "DTF"])
+    ap.add_argument("--max-gap", type=int, default=720,
+                    help="production gap bound in days (default 720 = two "
+                         "water years on the 360-day model calendar, "
+                         "manuscript Section 2.3); pass 0 for uncensored")
     ap.add_argument("--outdir", default="derived_output",
                     help="directory for the CSV summaries (omit with --no-write)")
     ap.add_argument("--no-write", action="store_true",
@@ -286,7 +302,7 @@ def main() -> None:
     if args.input is None:
         _self_test()
         return
-    df = load(args.input, args.direction)
+    df = load(args.input, args.direction, max_gap=args.max_gap or None)
     report(df, outdir=None if args.no_write else args.outdir)
 
 

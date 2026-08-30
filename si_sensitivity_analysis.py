@@ -7,7 +7,7 @@ respond to three parameters of the storage-based pairing and coherence filter
 (slow_transition_analysis.Config):
 
   - resaturation_delta  (storage re-saturation tolerance; production 0.15)
-  - max_gap_days        (upper bound on transition gap; production 730)
+  - max_gap_days        (upper bound on transition gap; production 720)
   - coherence_min       (coherence threshold; production 0.60)
 
 For each grid point (varying one parameter, holding the other two at their
@@ -57,11 +57,11 @@ import slow_transition_analysis as sta
 
 # Production (default) parameter values, per the main text.
 PROD_RESAT = 0.15
-PROD_MAXGAP = 730
+PROD_MAXGAP = 720
 PROD_COHMIN = 0.60
 
 DEFAULT_RESAT_GRID = [0.10, 0.15, 0.20, 0.25]
-DEFAULT_MAXGAP_GRID = [365, 546, 730, 1095]
+DEFAULT_MAXGAP_GRID = [360, 540, 720, 1080]
 DEFAULT_COHMIN_GRID = [0.50, 0.55, 0.60, 0.65, 0.70]
 
 ABRUPT_CUTOFF = 90

@@ -44,10 +44,10 @@ the abrupt pipeline) so that changes reflect distribution shifts, not a moving
 definition. For real ensemble runs, pass ensemble-median thresholds via
 `thresholds=`.
 
-The 90-day window is gone, but a generous 730-day (two water year) bound is
+The 90-day window is gone, but a generous 720-day (two water year) bound is
 retained to exclude multi-annual pairings, which fall outside the
 seasonal-to-annual regime the paper examines. That is Config.max_gap_days, and
-730 is the production value used for every reported result -- do not run
+720 is the production value used for every reported result -- do not run
 uncensored and then read numbers off the result.
 
 Run `python slow_transition_analysis.py` with no arguments to execute a
@@ -76,7 +76,7 @@ class Config:
     flood_min_dur: int = 1         # days
     flood_pool_gap: int = 5        # floods < this many days apart are merged
     drought_min_spell: int = 5     # days; droughts are NOT pooled
-    max_gap_days: int | None = 730   # two water years; None = uncensored
+    max_gap_days: int | None = 720   # two water years; None = uncensored
     resaturation_delta: float = 0.15  # storage re-saturation tolerance (norm.)
     coherence_min: float = 0.60    # keep pairs with near-monotone storage path
     coherence_store: str = "ratelim"  # 'ratelim' (rate-limiting store) | 'total'
@@ -628,9 +628,9 @@ def main() -> None:
     ap.add_argument("--input", type=str, default=None,
                     help="Parquet/CSV already in schema. Omit for self-test.")
     ap.add_argument("--out", type=str, default="slow_full_flow.parquet")
-    ap.add_argument("--max-gap", type=int, default=730,
+    ap.add_argument("--max-gap", type=int, default=720,
                     help="Upper bound on the transition gap, in days (default "
-                         "730 = two water years, the production value; pass 0 "
+                         "720 = two water years, the production value; pass 0 "
                          "for an uncensored distribution pass).")
     ap.add_argument("--coherence-min", type=float, default=0.60)
     ap.add_argument("--attribution", type=str, default="runoff-norm",

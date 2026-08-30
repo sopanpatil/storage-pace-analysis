@@ -125,7 +125,7 @@ def make_figure(df: pd.DataFrame, outdir: str,
     axA, axB = axes[0], axes[1]
 
     # ---- Panel (a): P(LZ-limited) vs gap ----------------------------------
-    edges = np.array([0, 10, 20, 30, 45, 60, 90, 130, 180, 260, 365, 730],
+    edges = np.array([0, 10, 20, 30, 45, 60, 90, 130, 180, 260, 360, 720],
                      dtype=float)
     cent = 0.5 * (edges[:-1] + edges[1:])
     frac, nper = [], []

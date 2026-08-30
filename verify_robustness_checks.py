@@ -19,7 +19,7 @@ the committed transition table, because each needs the raw HBV output in
      the logged melt flux from `<rcp>_<member>_hbv_melt.csv`.
 
 Both are quoted in the manuscript as properties of the production run, which is
-730-day capped (Section 2.3). Run this after any change to the pairing,
+720-day capped (Section 2.3). Run this after any change to the pairing,
 coherence or cap settings, so the two robustness numbers stay on the same
 footing as the headline ones that verify_manuscript_numbers.py covers.
 
@@ -46,7 +46,7 @@ import slow_transition_analysis as sta
 import snow_melt_contribution as smc
 
 # ---- values as reported in the manuscript (edit here if the draft changes) --- #
-# All values below are from the 730-day-capped production run (JASMIN,
+# All values below are from the 720-day-capped production run (JASMIN,
 # 2026-08-11), which is what the manuscript now reports.
 MS = {
     "runoff_norm_slow_lz": 0.995,     # Section 3.2, "in near-exact agreement"
@@ -171,7 +171,7 @@ def main() -> None:
                     help="production transition table, for the snowmelt check")
     ap.add_argument("--rcps", default=",".join(sta.RCPS))
     ap.add_argument("--members", default=",".join(sta.MEMBERS))
-    ap.add_argument("--max-gap", type=int, default=730,
+    ap.add_argument("--max-gap", type=int, default=720,
                     help="production gap bound (manuscript Section 2.3)")
     ap.add_argument("--skip-attribution", action="store_true",
                     help="snowmelt check only (the attribution pass is slow)")
