@@ -240,7 +240,7 @@ disagree with the values reported in the manuscript.
 
 Two further figures cannot be checked from the transition table, because each
 needs the raw HBV output: the range-normalised store-attribution cross-check
-(99.6%, Section 3.2), which must re-read the UZ/LZ state series, and the
+(99.5%, Section 3.2), which must re-read the UZ/LZ state series, and the
 snowmelt statistics in the Discussion, which read the logged melt flux. Both are
 covered by:
 

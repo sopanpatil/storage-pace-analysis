@@ -151,7 +151,7 @@ def main():
         print(f"  {rcp:<6}{row['future_median']:>8}{row['future_p90']:>9}{row['future_slow']:>10}{row['d_median']:>7}"
               f"   ms {ms} d_med {msd}  med {fm}  slow {fs}  d_slow {ds}")
 
-    print("\nNote: 99.6% runoff-norm cross-check is a SEPARATE run "
+    print("\nNote: 99.5% runoff-norm cross-check is a SEPARATE run "
           "(--attribution runoff-norm) and is not recomputable from this "
           "flow-attribution table; refresh it only if you want that robustness "
           "figure updated.")

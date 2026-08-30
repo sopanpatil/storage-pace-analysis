@@ -8,7 +8,7 @@ the committed transition table, because each needs the raw HBV output in
 
   1. The store-attribution cross-check (Section 3.2). The headline 99.5% is the
      flow-weighted attribution. Replacing it with the range-normalised
-     storage-change criterion is reported to assign 99.6% of slow FTD
+     storage-change criterion is reported to assign 99.5% of slow FTD
      transitions to the lower zone. That criterion reads the UZ and LZ state
      series, which slow_full_flow.parquet does not carry, so it needs a second
      pass over the raw output with attribution="runoff-norm".
