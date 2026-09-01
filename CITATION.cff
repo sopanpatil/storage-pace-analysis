@@ -8,16 +8,19 @@ authors:
     affiliation: "Bangor University"
   - family-names: Dallison
     given-names: Richard J. H.
+    orcid: "https://orcid.org/0000-0001-5673-1919"
     affiliation: "Bangor University"
   - family-names: Jahanshahi
     given-names: Afshin
+    orcid: "https://orcid.org/0000-0003-0221-0055"
     affiliation: "University of Galway"
 version: "1.0.0"
 license: MIT
 repository-code: "https://github.com/sopanpatil/storage-pace-analysis"
-# When archiving a tagged release to Zenodo, add the two lines below:
-#   date-released: "2026-MM-DD"
-#   doi: "10.5281/zenodo.XXXXXXX"
+date-released: "2026-09-01"
+# Concept DOI: resolves to the newest version, so it stays correct across
+# releases. The v1.0.0 version DOI is 10.5281/zenodo.22238122.
+doi: "10.5281/zenodo.22238121"
 preferred-citation:
   type: article
   title: "Storage controls on the pace of flood-drought transitions across Great Britain under a warming climate"
