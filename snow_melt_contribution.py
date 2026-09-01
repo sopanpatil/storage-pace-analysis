@@ -45,10 +45,18 @@ def _window_idx(date_col: pd.Series, period: str) -> np.ndarray:
     return np.flatnonzero(mask)
 
 
-def select_carriers(tr: pd.DataFrame) -> pd.DataFrame:
-    """The population the snow argument is about: coherent, slow, LZ-limited FTD."""
+def select_carriers(tr: pd.DataFrame, max_gap: int | None = 720) -> pd.DataFrame:
+    """The population the snow argument is about: coherent, slow, LZ-limited FTD.
+
+    The production gap cap (manuscript Section 2.3) is applied here rather than
+    assumed of the caller, so importers get the same 720-day population as the
+    command-line path whether the table on disk is pre-capped or not. Pass
+    max_gap=None for uncensored.
+    """
     tr = tr.copy()
     tr["gauge_id"] = tr["gauge_id"].astype(str)
+    if max_gap:
+        tr = tr[tr["gap_days"] <= max_gap]
     return tr[(tr["direction"] == "FTD") & (tr["passes_coherence"])
               & (tr["regime"] == "slow")
               & (tr["rate_limiting_store"] == "LZ")].reset_index(drop=True)
@@ -148,10 +156,16 @@ def _self_test() -> None:
                              rate_limiting_store="LZ", passes_coherence=True,
                              gap_days=gap, t_start=t0, t_end=t0 + gap,
                              d_ratelim_mm=-float(rng.uniform(40, 120))))
-    tr = pd.DataFrame(rows)
+    # One multi-annual pairing beyond the production cap, to prove select_carriers
+    # censors at max_gap for importers too (verify_robustness_checks.py calls it
+    # directly, so a cap applied only in main() would silently miss this row).
+    over = dict(rows[0], gauge_id="g00", gap_days=900, t_start=20, t_end=920)
+    tr = pd.DataFrame(rows + [over])
 
     carriers = select_carriers(tr)
     assert len(carriers) == 50, len(carriers)
+    assert (carriers["gap_days"] <= 720).all(), carriers["gap_days"].max()
+    assert len(select_carriers(tr, max_gap=None)) == 51, "max_gap=None must not censor"
     ok = melt_over_transitions(carriers, str(tmp))
     s = summarise(ok)
     expected = rate * (gap + 1)          # inclusive window, so gap + 1 days
@@ -186,9 +200,7 @@ def main() -> None:
         return
 
     tr = pd.read_parquet(args.input)
-    if args.max_gap:
-        tr = tr[tr["gap_days"] <= args.max_gap].copy()
-    carriers = select_carriers(tr)
+    carriers = select_carriers(tr, max_gap=args.max_gap or None)
     print(f"coherent slow LZ-limited FTD carriers: {len(carriers):,}")
     if carriers.empty:
         return

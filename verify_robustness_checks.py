@@ -41,7 +41,6 @@ import argparse
 import numpy as np
 import pandas as pd
 
-import selftest_io
 import slow_transition_analysis as sta
 import snow_melt_contribution as smc
 
@@ -121,12 +120,12 @@ def check_attribution(jasmin_dir: str, params: str, rcps, members,
               f"ms {MS[key]}   {flag(share, MS[key], TOL[key])}   [recomputed]")
 
 
-def check_snowmelt(input_parquet: str, jasmin_dir: str) -> None:
+def check_snowmelt(input_parquet: str, jasmin_dir: str, max_gap: int = 720) -> None:
     print("\n" + "=" * 72)
     print("(2) SNOWMELT WITHIN SLOW FTD CARRIERS")
     print("=" * 72)
     tr = pd.read_parquet(input_parquet)
-    carriers = smc.select_carriers(tr)
+    carriers = smc.select_carriers(tr, max_gap=max_gap or None)
     ok = smc.melt_over_transitions(carriers, jasmin_dir)
     s = smc.summarise(ok)
     print(f"  n carriers with melt data : {s['n']:,} of {len(carriers):,}")
@@ -190,7 +189,7 @@ def main() -> None:
                           args.rcps.split(","), args.members.split(","),
                           args.max_gap,
                           flow_table=None if args.rerun_flow else args.input)
-    check_snowmelt(args.input, args.jasmin_dir)
+    check_snowmelt(args.input, args.jasmin_dir, args.max_gap)
 
 
 if __name__ == "__main__":
