@@ -1,7 +1,7 @@
 """
 agu_style.py
 ============
-Shared Matplotlib styling for the Water Resources Research figures of
+Shared Matplotlib styling for the AGU/Wiley-format figures of
 
     Patil, Dallison & Jahanshahi,
     "Storage controls on the pace of flood-drought transitions across

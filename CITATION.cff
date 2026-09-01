@@ -28,6 +28,6 @@ preferred-citation:
       given-names: Richard J. H.
     - family-names: Jahanshahi
       given-names: Afshin
-  journal: "Water Resources Research"
   year: 2026
-  # doi: "10.xxxx/xxxxxxxxxx"   # add once the WRR DOI is assigned
+  # journal: "..."               # add once the venue is settled
+  # doi: "10.xxxx/xxxxxxxxxx"    # add once the article DOI is assigned
