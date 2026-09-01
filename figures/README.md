@@ -10,8 +10,12 @@ alongside them.
 Run the scripts **from the repository root** so `import agu_style` and the
 default input paths resolve. `fig01` and `fig04` render from a fresh clone with
 no arguments (their defaults point at the bundled CAMELS-GB attribute tables and
-`derived_output/`); `fig02`, `fig03`, and `fig05` additionally need pipeline
-outputs that are not committed (see below), which you regenerate first.
+`derived_output/`). `fig05` also renders from a fresh clone, but its
+`--projection` and `--forcing` defaults name the working-directory paths a full
+pipeline run writes, so point them at the committed copies under
+`derived_output/` (as in the command below). Only `fig02` and `fig03` need
+`slow_full_flow.parquet`, which is too large to commit and must be regenerated
+first.
 
 ```bash
 python figures/fig01_studyarea.py    --outdir figures   # inputs default to bundled tables + derived_output/
@@ -21,8 +25,8 @@ python figures/fig03_mechanism.py    --input slow_full_flow.parquet --outdir fig
     --attr-dir camels_gb_v2_hydrologic_attributes.csv \
     --basemap figures/gb_outline_27700.geojson   # panel (c); omit these three for the (a)+(b) core
 python figures/fig04_corroboration.py --outdir figures   # inputs default to derived_output/
-python figures/fig05_projection.py   --projection projection_flow.parquet \
-    --forcing forcing_deltas_rcp85.csv --outdir figures   # --responder defaults to derived_output/
+python figures/fig05_projection.py   --projection derived_output/projection_flow.parquet \
+    --forcing derived_output/forcing_deltas_rcp85.csv --outdir figures   # --responder defaults to derived_output/
 python figures/figS1_timescales.py   --params calibrated_parameters.csv --outdir figures
 ```
 
@@ -32,7 +36,7 @@ python figures/figS1_timescales.py   --params calibrated_parameters.csv --outdir
 | `fig02_continuum.py` | Fig. 2 (gap continuum) | `slow_full_flow.parquet` (regenerated) |
 | `fig03_mechanism.py` | Fig. 3 (store mechanism, BFI map) | `slow_full_flow.parquet` (regenerated), `camels_gb_v2_catchment_boundaries.zip`, `camels_gb_v2_hydrologic_attributes.csv` (`baseflow_index`), `gb_outline_27700.geojson` (bundled); `calibrated_parameters.csv` optional (restricts panel (c) to the 621 retained catchments) |
 | `fig04_corroboration.py` | Fig. 4 (borehole corroboration) | the three corroboration tables in `derived_output/` |
-| `fig05_projection.py` | Fig. 5 (projection) | `projection_flow.parquet` and `forcing_deltas_<rcp>.csv` (regenerated), `derived_output/responder_table.parquet` |
+| `fig05_projection.py` | Fig. 5 (projection) | `derived_output/projection_flow.parquet`, `derived_output/forcing_deltas_rcp85.csv`, `derived_output/responder_table.parquet` (all committed) |
 | `figS1_timescales.py` | Fig. S1 (recession timescales) | `calibrated_parameters.csv` (from hbv-model; timescales computed from K1/K2) |
 
 **External dependencies:**

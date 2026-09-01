@@ -15,7 +15,7 @@ distribution, and a fixed 90-day window simply censors the tail of that
 population, a tail that roughly doubles under warming.
 
 Manuscript values to reproduce
-    Baseline FTD : median 13 d, 90th pctl 56 d, slow share (>90 d) 5.0 %
+    Baseline FTD : median 13 d, 90th pctl 56 d, slow share (>90 d) 4.9 %
     Future  FTD  : 90th pctl 86-91 d, slow share 9.2-10.1 % across the four RCPs
 
 Panels
