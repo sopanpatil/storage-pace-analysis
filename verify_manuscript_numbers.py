@@ -46,7 +46,7 @@ MS = {
     # Table 1 future point values (median / p90 / slowshare) per RCP
     "tbl_future": {"rcp26": (15, 86, 0.092), "rcp45": (15, 89, 0.096),
                    "rcp60": (16, 87, 0.092), "rcp85": (21, 91, 0.101)},
-    "tbl_dslow": {"rcp26": 0.043, "rcp45": 0.047, "rcp60": 0.043, "rcp85": 0.052},
+    "tbl_dslow": {"rcp26": 0.043, "rcp45": 0.047, "rcp60": 0.042, "rcp85": 0.052},
     "tbl_dmedian": {"rcp26": 2, "rcp45": 2, "rcp60": 3, "rcp85": 8},
 }
 
@@ -59,18 +59,29 @@ def flag(recomputed, manuscript, tol):
 
 
 def pop_shift(tr, direction):
+    """Per-RCP pooled gap statistics, with the deltas taken before rounding.
+
+    The reported period values are rounded for display (Table 1 columns 2-4),
+    but each delta is formed from the unrounded shares and rounded once, which
+    is what bootstrap_conditional_gap.py reports and what Table 1 column 7
+    quotes. Rounding first instead would put RCP6.0's slow-share change at
+    +4.3 pp (0.092 - 0.049) against the +4.2 pp actually in the table.
+    """
     d = tr[tr["direction"] == direction]
     rows = []
     for rcp in RCPS:
         rec = {"rcp": rcp}
+        raw = {}
         for period in ("baseline", "future"):
             g = d[(d["rcp"] == rcp) & (d["period"] == period)]["gap_days"]
             rec[f"{period}_n"] = len(g)
-            rec[f"{period}_median"] = round(g.median(), 1) if len(g) else np.nan
+            raw[f"{period}_median"] = g.median() if len(g) else np.nan
+            raw[f"{period}_slow"] = (g > ABRUPT_CUTOFF).mean() if len(g) else np.nan
+            rec[f"{period}_median"] = round(raw[f"{period}_median"], 1) if len(g) else np.nan
             rec[f"{period}_p90"] = round(g.quantile(0.9), 1) if len(g) else np.nan
-            rec[f"{period}_slow"] = round((g > ABRUPT_CUTOFF).mean(), 3) if len(g) else np.nan
-        rec["d_median"] = round(rec["future_median"] - rec["baseline_median"], 1)
-        rec["d_slow"] = round(rec["future_slow"] - rec["baseline_slow"], 3)
+            rec[f"{period}_slow"] = round(raw[f"{period}_slow"], 3) if len(g) else np.nan
+        rec["d_median"] = round(raw["future_median"] - raw["baseline_median"], 1)
+        rec["d_slow"] = round(raw["future_slow"] - raw["baseline_slow"], 3)
         rows.append(rec)
     return pd.DataFrame(rows)
 

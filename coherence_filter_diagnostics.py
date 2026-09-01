@@ -104,6 +104,16 @@ def _store_share(sub: pd.DataFrame, store: str) -> float:
 # (1) attribution before and after the filter
 # --------------------------------------------------------------------------
 def attribution_before_after(df: pd.DataFrame) -> pd.DataFrame:
+    """Store composition of each regime, before and after the coherence filter.
+
+    Two counts are emitted because they differ and the shares use the second.
+    `n` is every candidate transition in the population; `n_attributed` drops
+    those whose rate_limiting_store is 'none', and is the denominator behind
+    uz_share/lz_share (see _store_share). For slow FTD candidates the two are
+    222,890 and 220,821 -- the latter is the count the manuscript quotes
+    alongside the 79.2% unfiltered lower-zone share, so reading 79.2% against
+    `n` would not reproduce it.
+    """
     rows = []
     for regime, mask in (("slow (> 90 d)", df["gap_days"] > CUTOFF),
                          ("abrupt (<= 90 d)", df["gap_days"] <= CUTOFF)):
@@ -111,8 +121,10 @@ def attribution_before_after(df: pd.DataFrame) -> pd.DataFrame:
         for label, s in (("all candidates", sub),
                          ("retained (C >= 0.60)", sub[sub["passes_coherence"]]),
                          ("rejected", sub[~sub["passes_coherence"]])):
+            att = s["rate_limiting_store"]
             rows.append(dict(
                 regime=regime, population=label, n=len(s),
+                n_attributed=int(((att == "UZ") | (att == "LZ")).sum()),
                 uz_share=_store_share(s, "UZ"),
                 lz_share=_store_share(s, "LZ"),
             ))
