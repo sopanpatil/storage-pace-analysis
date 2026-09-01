@@ -85,7 +85,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-import agu_style as S
+import figure_style as S
 
 # grp labels, in the order used throughout the manuscript
 GRP_ORDER = ["Chalk", "Other", "Permo-Triassic sst"]

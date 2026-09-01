@@ -74,7 +74,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-import agu_style as S
+import figure_style as S
 
 CUTOFF = 90
 

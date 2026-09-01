@@ -1,23 +1,23 @@
 """
-agu_style.py
-============
-Shared Matplotlib styling for the AGU/Wiley-format figures of
+figure_style.py
+===============
+Shared Matplotlib styling for the figures of
 
     Patil, Dallison & Jahanshahi,
     "Storage controls on the pace of flood-drought transitions across
      Great Britain under a warming climate."
 
-Encapsulates the AGU/Wiley graphics requirements so that every figure script
+Encapsulates the figure requirements so that every figure script
 (fig01_studyarea.py, fig02_continuum.py, fig03_mechanism.py,
  fig04_corroboration.py, fig05_projection.py, figS1_timescales.py) produces
 submission-ready output without repeating the boilerplate.
 
-AGU figure requirements enforced here
--------------------------------------
+Figure requirements enforced here
+---------------------------------
 * Width 50-170 mm (1-col 50-85 mm; 2-col 105-170 mm); height <= 228 mm.
 * In-figure text 8 pt at final print size (6 pt sub/superscript); nothing < 6 pt.
 * Vector PDF for publication; a 600-dpi PNG preview is written alongside for drafting.
-* Colour-blind-safe palette (Okabe-Ito) per AGU's accessible-colour guidance.
+* Colour-blind-safe palette (Okabe-Ito).
 * Fonts embedded as TrueType (Type-42) so the PDF is editable/portable.
 
 Dependencies: matplotlib, numpy (both present in the JASMIN `jaspy` env).
@@ -71,7 +71,7 @@ RCP_LABELS = {
 
 
 def set_style() -> None:
-    """Apply AGU-compliant rcParams. Call once at the top of each figure script."""
+    """Apply the shared rcParams. Call once at the top of each figure script."""
     mpl.rcParams.update({
         # --- fonts: 8 pt body, nothing below 6 pt ---
         "font.family":      "sans-serif",

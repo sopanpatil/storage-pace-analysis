@@ -105,7 +105,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-import agu_style as S
+import figure_style as S
 
 # grp labels/colours, matched to fig04_corroboration.py so the two figures
 # read as one visual system.

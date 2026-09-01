@@ -44,7 +44,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-import agu_style as S
+import figure_style as S
 
 RCPS = ("rcp26", "rcp45", "rcp60", "rcp85")
 CUTOFF = 90  # the conventional abrupt/slow window (days)

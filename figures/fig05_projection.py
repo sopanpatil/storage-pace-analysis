@@ -67,7 +67,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 from matplotlib.gridspec import GridSpecFromSubplotSpec
 
-import agu_style as S
+import figure_style as S
 
 RCPS = ("rcp26", "rcp45", "rcp60", "rcp85")
 GROUP_ORDER = ["non_responder", "middle", "responder"]

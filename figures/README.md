@@ -3,11 +3,11 @@
 Scripts that render the manuscript and Supporting Information figures. They read
 the pipeline outputs (from the repository root, or from `derived_output/` for the
 committed summary tables) and write a vector PDF plus a 600-dpi PNG preview.
-`agu_style.py` holds the shared AGU/Wiley styling (85–170 mm widths, 8 pt text,
+`figure_style.py` holds the shared styling (85–170 mm widths, 8 pt text,
 Okabe–Ito palette) and is imported by the figure scripts, so it lives here
 alongside them.
 
-Run the scripts **from the repository root** so `import agu_style` and the
+Run the scripts **from the repository root** so `import figure_style` and the
 default input paths resolve. `fig01` and `fig04` render from a fresh clone with
 no arguments (their defaults point at the bundled CAMELS-GB attribute tables and
 `derived_output/`). `fig05` also renders from a fresh clone, but its

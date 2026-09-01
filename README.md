@@ -118,7 +118,7 @@ storage-pace-analysis/
 ├── regenerate_and_verify_fluxes.py provenance check: prove the re-run reproduces the archived HBV states/fluxes
 ├── selftest_io.py                  keeps no-argument self-test output out of the production paths
 ├── camels_gb_v2_*_attributes.csv   bundled CAMELS-GB v2 attribute tables (OGL v3.0)
-├── figures/                        figure scripts + shared AGU styling (see figures/README.md)
+├── figures/                        figure scripts + shared figure styling (see figures/README.md)
 ├── derived_output/                 small summary tables backing the figures (see derived_output/README.md)
 ├── requirements.txt
 ├── CITATION.cff
