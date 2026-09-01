@@ -80,8 +80,10 @@ class Config:
     resaturation_delta: float = 0.15  # storage re-saturation tolerance (norm.)
     coherence_min: float = 0.60    # keep pairs with near-monotone storage path
     coherence_store: str = "ratelim"  # 'ratelim' (rate-limiting store) | 'total'
-    min_storage_change_mm: float = 2.0  # ignore transitions with trivial total dS
-    min_ratelim_change_mm: float = 1.0  # ...and trivial rate-limiting-store dS
+    min_storage_change_mm: float = 2.0  # trivial total dS; used ONLY when
+                                        # coherence_store == 'total'
+    min_ratelim_change_mm: float = 1.0  # trivial rate-limiting-store dS; this is
+                                        # the 1 mm criterion the paper reports
     terminal_frac: float = 0.20    # terminal window = this fraction of the gap
     terminal_min_days: int = 14    # ...but at least this many days
     snow_driver_mm: float = 5.0    # |snow change| above this flags a snow driver

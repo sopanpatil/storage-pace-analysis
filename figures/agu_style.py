@@ -25,7 +25,6 @@ Dependencies: matplotlib, numpy (both present in the JASMIN `jaspy` env).
 from __future__ import annotations
 
 import matplotlib as mpl
-import matplotlib.pyplot as plt
 
 # --------------------------------------------------------------------------- #
 # Physical sizing                                                             #

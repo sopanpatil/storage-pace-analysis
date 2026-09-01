@@ -140,7 +140,6 @@ def _make_mock(tmp: Path) -> str:
         if mo > 12:
             mo = 1; y += 1
     dates = np.array(dates)
-    month = np.array([int(s[5:7]) for s in dates])
     doy = np.arange(n) % 360
     season = np.cos(2 * np.pi * doy / 360)     # +1 winter, -1 summer
     is_future = np.array([int(s[:4]) >= 2050 for s in dates])

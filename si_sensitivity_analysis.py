@@ -48,7 +48,6 @@ from __future__ import annotations
 import argparse
 from dataclasses import replace
 
-import numpy as np
 import pandas as pd
 
 import selftest_io

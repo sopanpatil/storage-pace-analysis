@@ -55,6 +55,8 @@ import argparse, importlib.util, json, os, sys
 import numpy as np
 import pandas as pd
 
+import selftest_io
+
 # --- archive naming (matches the chess_scape_output layout) ----------------- #
 STATE_SUFFIX   = {"SM": "hbv_sm", "SP": "hbv_sp", "UZ": "hbv_uz",
                   "LZ": "hbv_lz", "Q": "hbv_discharge"}
@@ -190,7 +192,7 @@ def selftest(model_path):
     print("SELFTEST: fabricate a %.4f archive from the model, then verify + write.\n")
     HBV = load_hbv(model_path)
     rng = np.random.default_rng(7)
-    tmp = os.path.join(model_path, "_selftest_archive"); os.makedirs(tmp, exist_ok=True)
+    tmp = str(selftest_io.redirect("syn_flux_archive", True)); os.makedirs(tmp, exist_ok=True)
     pr_root = os.path.join(tmp, "params"); os.makedirs(os.path.join(pr_root,"hbv"), exist_ok=True)
     rcp, member, n = "rcp85", "01", 4000
     gauges = ["1001","2001","3001","45009"]; dates=[f"D{i:05d}" for i in range(n)]
