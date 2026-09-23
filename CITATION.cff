@@ -14,10 +14,10 @@ authors:
     given-names: Afshin
     orcid: "https://orcid.org/0000-0003-0221-0055"
     affiliation: "University of Galway"
-version: "1.0.0"
+version: "1.1.0"
 license: MIT
 repository-code: "https://github.com/sopanpatil/storage-pace-analysis"
-date-released: "2026-09-01"
+date-released: "2026-09-23"
 # Concept DOI: resolves to the newest version, so it stays correct across
 # releases. The v1.0.0 version DOI is 10.5281/zenodo.22238122.
 doi: "10.5281/zenodo.22238121"

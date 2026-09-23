@@ -127,7 +127,7 @@ def univariate(d: pd.DataFrame, predictors: list[str]) -> pd.DataFrame:
             # rank-biserial effect size. mannwhitneyu(r, n) returns U for the
             # FIRST argument (r = responders), so positive effect_r here means
             # "responders tend to have larger values than non-responders",
-            # matching the convention stated in the docstring / Text S3.
+            # matching the convention stated in the docstring / Text S2.
             rec["effect_r"] = round(2 * U / (len(r) * len(n)) - 1, 3)  # rank-biserial
             rec["p"] = p
         rows.append(rec)

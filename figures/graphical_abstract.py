@@ -2,7 +2,7 @@
 """
 graphical_abstract.py
 =====================
-Graphical abstract for the Hydrological Processes submission: a standalone,
+Graphical abstract: a standalone,
 single-panel version of Figure 2a (pooled coherent FTD gap histogram, baseline
 vs RCP8.5 future, with the 90-day convention and the censored slow tail).
 

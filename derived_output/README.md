@@ -25,9 +25,9 @@ the paper and are not read by any script in this repository:
 | `si_sensitivity_pairing.csv` | `si_sensitivity_analysis.py` | Supporting Information Table S1 |
 | `si_sensitivity_coherence.csv` | `si_sensitivity_analysis.py` | Supporting Information Table S2 |
 | `table_s3.csv` | `si_table_s3.py` | Supporting Information Table S3 |
-| `coherence_attribution_before_after.csv` | `coherence_filter_diagnostics.py` | the unfiltered/retained store shares quoted in Section 3.2 (79.2%, 4.0%, 43.7%) |
+| `coherence_attribution_before_after.csv` | `coherence_filter_diagnostics.py` | the unfiltered/retained store shares and retention rates quoted in Section 3.2 (79.2%, 4.0%, 43.7%, and 27.4% abrupt retention) |
 | `coherence_retention_by_store.csv` | `coherence_filter_diagnostics.py` | per-store retention behind the same passage |
-| `lz_share_by_gap_band.csv` | `coherence_filter_diagnostics.py` | unpooled version of Figure 3a |
+| `lz_share_by_gap_band.csv` | `coherence_filter_diagnostics.py` | the unfiltered lower-zone share by gap band quoted in Section 3.2 (0.1%, 39%, 72%, 81%, 87%); the same quantity, on Figure 3a's bins, is its dashed curve |
 | `tail_quantiles.csv`, `tail_exceedance.csv` | `coherence_filter_diagnostics.py` | gap quantiles and the exceedance ladder behind Figure 2b |
 | `paired_differences.csv` (+ `_per_term`, `_members`, `_members_per_term`) | `bootstrap_paired_differences.py` | the paired RCP-vs-RCP and FTD-vs-DTF contrasts in Section 3.4 (e.g. +6 d [+3, +9]); the `_members` pair is the ensemble-aware `--resample-members` variant |
 | `recession_timescales.{png,pdf}` | `recession_timescales.py` | that script's own diagnostic plot; Figure S1 itself is rendered separately by `figures/figS1_timescales.py` |

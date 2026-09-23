@@ -18,7 +18,7 @@ Manuscript values to reproduce
                  Permo-Triassic sandstone 11
     Labelled   : 37010, 34012 (Section 3.3 identifiability cross-check),
                  39007, 34004 (abstraction-affected Chalk misses),
-                 42016 "Abbotstone" (flagship daily Chalk site)
+                 42016 "Abbotstone" (daily-record Chalk site, Section 3.3)
 
 Panels
     (a) All 671 candidate catchments as boundary polygons (British National

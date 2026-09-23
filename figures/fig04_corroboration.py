@@ -32,7 +32,7 @@ not part of the three summary tables this script consumes.
 Manuscript values this script is expected to reproduce (from the provided
 corroboration tables)
     Median interannual rho_anom : Chalk 0.43, other fractured 0.38, sandstone 0.06
-    Best Chalk sites            : 0.85, 0.73, ... (0.55 = the flagship daily
+    Best Chalk sites            : 0.85, 0.73, ... (0.55 = the daily-record
                                    site, catchment 42016 / "Abbotstone")
     Corroborable transitions    : 33 total, 24 at 8 Chalk sites
     Chalk event test            : co-decline 100% over 24 dry-downs; across the
@@ -100,7 +100,7 @@ GRP_COLORS = {
     "Permo-Triassic sst": S.C_FUTURE,     # decoupled -> the "warning" vermilion
 }
 
-ABBOTSTONE_ID = 42016   # flagship daily Chalk site (med_gwl_coh = 0.71 matches text)
+ABBOTSTONE_ID = 42016   # Abbotstone, daily-record Chalk site (med_gwl_coh = 0.71 matches text)
 FLOORED_NEG_ID = 34012  # Chalk carrier, K2 floored, negative correlation
 FLOORED_OK_ID = 37010   # Chalk carrier, K2 floored, still corroborates (rho ~0.45)
 ABSTRACTED_MISSES = (39007, 34004)  # Chalk misses, >90% public-supply abstraction

@@ -13,8 +13,8 @@ no arguments (their defaults point at the bundled CAMELS-GB attribute tables and
 `derived_output/`). `fig05` also renders from a fresh clone, but its
 `--projection` and `--forcing` defaults name the working-directory paths a full
 pipeline run writes, so point them at the committed copies under
-`derived_output/` (as in the command below). Only `fig02` and `fig03` need
-`slow_full_flow.parquet`, which is too large to commit and must be regenerated
+`derived_output/` (as in the command below). Only `fig02`, `fig03` and
+`graphical_abstract` need `slow_full_flow.parquet`, which is too large to commit and must be regenerated
 first.
 
 ```bash
@@ -28,16 +28,18 @@ python figures/fig04_corroboration.py --outdir figures   # inputs default to der
 python figures/fig05_projection.py   --projection derived_output/projection_flow.parquet \
     --forcing derived_output/forcing_deltas_rcp85.csv --outdir figures   # --responder defaults to derived_output/
 python figures/figS1_timescales.py   --params calibrated_parameters.csv --outdir figures
+python figures/graphical_abstract.py --input slow_full_flow.parquet --outdir figures
 ```
 
 | Script | Figure | Main input(s) |
 |--------|--------|---------------|
 | `fig01_studyarea.py` | Fig. 1 (study catchments, corroboration network) | `camels_gb_v2_topographic_attributes.csv`, `camels_gb_v2_climatic_attributes.csv` (both bundled), `derived_output/corroboration_summary_final.csv`, `camels_gb_v2_catchment_boundaries.zip`, `gb_outline_27700.geojson` (bundled); `calibrated_parameters.csv` optional (KGE exclusion split) |
 | `fig02_continuum.py` | Fig. 2 (gap continuum) | `slow_full_flow.parquet` (regenerated) |
-| `fig03_mechanism.py` | Fig. 3 (store mechanism, BFI map) | `slow_full_flow.parquet` (regenerated), `camels_gb_v2_catchment_boundaries.zip`, `camels_gb_v2_hydrologic_attributes.csv` (`baseflow_index`), `gb_outline_27700.geojson` (bundled); `calibrated_parameters.csv` optional (restricts panel (c) to the 621 retained catchments) |
+| `fig03_mechanism.py` | Fig. 3 (store mechanism, BFI map; panel (a) draws coherent transitions and, dashed, all candidates before the coherence filter) | `slow_full_flow.parquet` (regenerated), `camels_gb_v2_catchment_boundaries.zip`, `camels_gb_v2_hydrologic_attributes.csv` (`baseflow_index`), `gb_outline_27700.geojson` (bundled); `calibrated_parameters.csv` optional (restricts panel (c) to the 621 retained catchments) |
 | `fig04_corroboration.py` | Fig. 4 (borehole corroboration) | the three corroboration tables in `derived_output/` |
 | `fig05_projection.py` | Fig. 5 (projection) | `derived_output/projection_flow.parquet`, `derived_output/forcing_deltas_rcp85.csv`, `derived_output/responder_table.parquet` (all committed) |
 | `figS1_timescales.py` | Fig. S1 (recession timescales) | `calibrated_parameters.csv` (from hbv-model; timescales computed from K1/K2) |
+| `graphical_abstract.py` | Graphical abstract (single-panel version of Fig. 2a) | `slow_full_flow.parquet` (regenerated) |
 
 **External dependencies:**
 - `fig01_studyarea.py` and `fig03_mechanism.py` both render their maps as
