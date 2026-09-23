@@ -78,6 +78,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.cm import ScalarMappable
+from matplotlib.colors import Normalize
+from matplotlib.transforms import Bbox
 
 import figure_style as S
 
@@ -256,16 +259,10 @@ def make_figure(df: pd.DataFrame, outdir: str,
         slow = df[(df["regime"] == "slow") & (df["period"] == "baseline")]
         carriers = set(slow["gauge_id"].astype(str)
                       .str.strip().str.replace(r"\.0$", "", regex=True).unique())
-        # geopandas builds the colorbar internally, so pick its axes out of
-        # the figure afterwards -- it has to travel with axC when the panel
-        # gaps are equalised below.
-        pre_axes = set(fig.axes)
+        # colorbar drawn by hand below, once the map has been resized; the
+        # one geopandas builds is sized to the original gridspec cell.
         merged.plot(ax=axC, column="baseflow_index", cmap="viridis",
-                   vmin=0, vmax=1, linewidth=0.15, edgecolor="0.6", zorder=1,
-                   legend=True,
-                   legend_kwds=dict(label="Baseflow index", shrink=0.55,
-                                    fraction=0.045, pad=0.02))
-        cbar_axes = [a for a in fig.axes if a not in pre_axes]
+                   vmin=0, vmax=1, linewidth=0.15, edgecolor="0.6", zorder=1)
         if carriers:
             hit = merged[merged["_gid"].isin(carriers)]
             if len(hit):
@@ -288,7 +285,39 @@ def make_figure(df: pd.DataFrame, outdir: str,
         pad = 0.02 * max(xmax - xmin, ymax - ymin)
         axC.set_xlim(xmin - pad, xmax + pad)
         axC.set_ylim(ymin - pad, ymax + pad)
-        S.panel_label(axC, "c", x=0.02, y=0.99)
+
+        # An equal-aspect map of GB is height-limited, so in its gridspec cell
+        # it is only as tall as the *plotting areas* of (a) and (b), whose
+        # legends above and tick/axis labels below make them read taller.
+        # Stretch (c) over the full drawn extent of (a)+(b) so all three
+        # panels occupy the same vertical band.
+        fig.canvas.draw()
+        renderer = fig.canvas.get_renderer()
+        inv = fig.transFigure.inverted()
+        band = Bbox.union([a.get_tightbbox(renderer) for a in (axA, axB)]
+                          ).transformed(inv)
+        cell = axC.get_position(original=True)
+        axC.set_anchor("W")
+        axC.set_position([cell.x0, band.y0, cell.width, band.height])
+        fig.canvas.draw()
+        box = axC.get_position()           # aspect-adjusted drawn map box
+        if box.height < 0.99 * band.height:
+            print("  [panel c] warning: map is width-limited; widen its "
+                  "width_ratio so it spans the full panel height")
+
+        fw, _ = fig.get_size_inches()
+        cbar_h = 0.55 * box.height
+        cax = fig.add_axes([box.x1 + 2.5 * S.MM / fw, box.y0 + 0.5 * (box.height - cbar_h),
+                            2.5 * S.MM / fw, cbar_h])
+        fig.colorbar(ScalarMappable(norm=Normalize(0, 1), cmap="viridis"),
+                     cax=cax, label="Baseflow index")
+        cbar_axes = [cax]
+
+        # (c) level with the (a)/(b) letters, which sit at axes y = 1.03
+        pa = axA.get_position()
+        y_lab = (pa.y1 + 0.03 * pa.height - box.y0) / box.height
+        S.panel_label(axC, "c", x=0.02, y=y_lab)
+        axC.texts[-1].set_ha("left")
 
     # (a) and (b) carry y-axis labels and tick labels that overflow their
     # gridspec cells, while (c) is an equal-aspect map that under-fills its
