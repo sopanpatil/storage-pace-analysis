@@ -24,7 +24,12 @@ Manuscript values to reproduce
 Panels
     (a) Fraction of FTD transitions that are baseflow (LZ) limited as a function
         of transition gap, showing convergence on baseflow as gaps lengthen;
-        the 90-day convention is marked for reference only.
+        the 90-day convention is marked for reference only. Drawn for the
+        coherent transitions and, dashed, for all candidates before the
+        coherence filter, so the reader can see that the convergence is a
+        property of the candidate population and not created by the filter
+        (the filter is evaluated on the store the attribution selects,
+        manuscript Section 2.4).
     (b) The asymmetry as two stacked bars -- abrupt vs slow -- partitioned into
         fast-flow (UZ) and baseflow (LZ) limited shares.
     (c) OPTIONAL spatial panel: analysed catchments coloured by baseflow index,
@@ -79,8 +84,12 @@ import figure_style as S
 CUTOFF = 90
 
 
-def load(parquet: str, max_gap: int | None = 720) -> pd.DataFrame:
-    """Load the coherent FTD transitions, censored at the production gap cap.
+def load(parquet: str, max_gap: int | None = 720,
+         coherent_only: bool = True) -> pd.DataFrame:
+    """Load the FTD transitions, censored at the production gap cap.
+
+    By default only coherent transitions are kept; coherent_only=False keeps
+    every attributed candidate, for the unfiltered curve in panel (a).
 
     The cap is applied here rather than assumed of the input, so the panels sit
     on the same 720-day production footing as the reported results (manuscript
@@ -95,7 +104,9 @@ def load(parquet: str, max_gap: int | None = 720) -> pd.DataFrame:
     missing = need - set(df.columns)
     if missing:
         raise KeyError(f"{parquet} is missing columns: {sorted(missing)}")
-    df = df[(df["direction"] == "FTD") & (df["passes_coherence"])].copy()
+    df = df[df["direction"] == "FTD"].copy()
+    if coherent_only:
+        df = df[df["passes_coherence"]].copy()
     # keep only transitions with an identified runoff-generating store
     df = df[df["rate_limiting_store"].isin(["UZ", "LZ"])].copy()
     df["gap_days"] = df["gap_days"].astype(float)
@@ -114,9 +125,18 @@ def summarise(df: pd.DataFrame) -> None:
                   f"UZ-limited {100-lz:5.1f}%  (n={len(g):,})")
 
 
+def _lz_by_band(d: pd.DataFrame, edges: np.ndarray) -> np.ndarray:
+    frac = []
+    for lo, hi in zip(edges[:-1], edges[1:]):
+        m = (d["gap_days"] >= lo) & (d["gap_days"] < hi)
+        frac.append(d.loc[m, "is_lz"].mean() if m.any() else np.nan)
+    return np.array(frac)
+
+
 def make_figure(df: pd.DataFrame, outdir: str,
                 geom: str | None, geom_id: str, attr_dir: str | None,
-                basemap: str | None = None, params: str | None = None) -> None:
+                basemap: str | None = None, params: str | None = None,
+                cand: pd.DataFrame | None = None) -> None:
 
     have_map = geom is not None and attr_dir is not None
     if have_map:
@@ -139,14 +159,21 @@ def make_figure(df: pd.DataFrame, outdir: str,
     edges = np.array([0, 10, 20, 30, 45, 60, 90, 130, 180, 260, 360, 720],
                      dtype=float)
     cent = 0.5 * (edges[:-1] + edges[1:])
-    frac, nper = [], []
-    for lo, hi in zip(edges[:-1], edges[1:]):
-        m = (df["gap_days"] >= lo) & (df["gap_days"] < hi)
-        nper.append(int(m.sum()))
-        frac.append(df.loc[m, "is_lz"].mean() if m.any() else np.nan)
-    frac = np.array(frac)
-    axA.plot(cent, frac * 100, color=S.C_SLOW, lw=1.3, marker="o", ms=3.2,
-             mec="white", mew=0.4)
+    if cand is not None:
+        axA.plot(cent, _lz_by_band(cand, edges) * 100, color=S.C_SLOW, lw=1.0,
+                 ls=(0, (3, 1.5)), marker="o", ms=2.6, mfc="white", mew=0.6,
+                 alpha=0.8, label="All candidates")
+    axA.plot(cent, _lz_by_band(df, edges) * 100, color=S.C_SLOW, lw=1.3,
+             marker="o", ms=3.2, mec="white", mew=0.4,
+             label=r"Coherent ($C \geq$ 0.60)")
+    if cand is not None:
+        # lower right, lifted clear of the "abrupt | slow" note: beyond ~50 d
+        # both curves stay above ~55 %, so this band is empty. Upper left
+        # collides with the coherent curve's rise at 20-45 d. The opaque,
+        # borderless frame lets the 90-day line pass behind the text.
+        axA.legend(loc="lower right", bbox_to_anchor=(1.0, 0.14), fontsize=6.5,
+                   frameon=True, facecolor="white", edgecolor="none",
+                   framealpha=1.0)
     axA.axvline(CUTOFF, color=S.OKABE_ITO["black"], lw=0.8, ls=(0, (4, 2)))
     axA.text(CUTOFF + 6, 8, "abrupt | slow", fontsize=7, rotation=0, va="bottom")
     axA.set_xscale("log")
@@ -366,10 +393,11 @@ def main() -> None:
 
     S.set_style()
     df = load(args.input, max_gap=args.max_gap or None)
+    cand = load(args.input, max_gap=args.max_gap or None, coherent_only=False)
     print("Figure 3 -- store-attribution asymmetry")
     summarise(df)
     make_figure(df, args.outdir, args.geom, args.geom_id, args.attr_dir,
-                args.basemap, args.params)
+                args.basemap, args.params, cand=cand)
 
 
 if __name__ == "__main__":
