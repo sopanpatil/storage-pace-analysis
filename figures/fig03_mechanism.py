@@ -167,13 +167,11 @@ def make_figure(df: pd.DataFrame, outdir: str,
              marker="o", ms=3.2, mec="white", mew=0.4,
              label=r"Coherent ($C \geq$ 0.60)")
     if cand is not None:
-        # lower right, lifted clear of the "abrupt | slow" note: beyond ~50 d
-        # both curves stay above ~55 %, so this band is empty. Upper left
-        # collides with the coherent curve's rise at 20-45 d. The opaque,
-        # borderless frame lets the 90-day line pass behind the text.
-        axA.legend(loc="lower right", bbox_to_anchor=(1.0, 0.14), fontsize=6.5,
-                   frameon=True, facecolor="white", edgecolor="none",
-                   framealpha=1.0)
+        # above the axes, matching panel (b): no band inside is wide enough
+        # to hold the legend without covering the curves' steep rise at
+        # 15-45 d. The longer handle lets the dashed/solid contrast show.
+        axA.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=1,
+                   handlelength=3.0)
     axA.axvline(CUTOFF, color=S.OKABE_ITO["black"], lw=0.8, ls=(0, (4, 2)))
     axA.text(CUTOFF + 6, 8, "abrupt | slow", fontsize=7, rotation=0, va="bottom")
     axA.set_xscale("log")
